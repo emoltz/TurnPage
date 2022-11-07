@@ -46,6 +46,7 @@ class HomeView(ListView):
         context["book14"] = self.random_items[13]
         context["book15"] = self.random_items[14]
 
+        # TODO is there a way to tell if the book has been swiped on?
         context["currentBook"] = self.getCurrentBook()
 
         return context
