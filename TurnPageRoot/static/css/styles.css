@@ -7,6 +7,10 @@
     --secondary-color-dark: #5E84B2;
 }
 
+* {
+  box-sizing: border-box
+}
+
 body {
     background-color: white;
     font-family: 'Open Sans', sans-serif;
@@ -303,3 +307,106 @@ footer {
 .bookshelf-vector{
     width: 50%;
 }
+
+
+.expander{
+  border:none;
+  border-radius: 50em;
+  padding: 10px 20px;
+  height: 40px;
+}
+
+#window{
+  width: 50px;
+  height: 50px;
+  background: #6fb587;
+  color: #fff;
+  position: absolute;
+  float: right;
+  margin: 250px 500px;
+  --webkit-transition: 0s all;
+  transition: 0s all;
+  padding: 10px;
+  font: 30px Helvetica, sans-serif;
+  line-height: 1px;
+}
+
+button:focus{
+  outline: none;
+}
+
+@keyframes bigandfit {
+  0% {
+    width: 50px;
+    height: 50px;
+  }
+
+  5% {
+    width: 70px;
+  }
+
+  12% {
+    width: 100px;
+  }
+
+  20% {
+    width: 70px;
+  }
+
+  25% {
+    width: 50px;
+    height: 50px;
+    margin: 255px 0 0 calc(50% - 20px);
+    border-radius: 100%;
+  }
+
+  100% {
+    width: 200%;
+    height: 200%;
+    margin: calc(275px - 100%) 0 0 calc(50% - 100%);
+  }
+}
+
+.ball {
+  animation-name: bigandfit;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards;
+}
+
+#modal {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: beige;
+  font-size: 100px;
+  text-align: center;
+  padding: 100px;
+  z-index: 100;
+  display: none;
+}
+
+.modal-content {
+  width: 550px;
+  height: 550px;
+  margin: 25px auto;
+  position: relative;
+  overflow: hidden;
+}
+
+#close {
+  width: 0px;
+  height: 0px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  transition: 0.4s all;
+  font: 12px Helvetica, sans-serif;
+}
+/*
+small {
+  font-size: 14px;
+} */
