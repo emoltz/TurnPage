@@ -51,9 +51,11 @@ INSTALLED_APPS = [
     "profiles",
     "utils",
     "multiselectfield",
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -119,12 +121,12 @@ else:
 # FOR EXPERIMENTAL LOCAL DEVELOPMENT:
 
 
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.sqlite3",
-    #         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    #     }
-    # }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+#     }
+# }
 
 
 # Password validation
@@ -198,3 +200,5 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = env("EMAIL")
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
+INTERNAL_IPS = ["127.0.0.1"]
