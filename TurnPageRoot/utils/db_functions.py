@@ -35,11 +35,13 @@ def addToShelf(book: Book, user: User, read: str):
             + direc
         )
         # print(url)
-        requests.get(url)
+        recommended_book_list = requests.get(url)
+        # first_recommended_book = recommended_book_list[0]
         book.likes = len(Bookshelf.objects.filter(book=book))
         book.save()
 
-        return Bookshelf.objects.get(book=book, user=user)
+        # return Bookshelf.objects.get(book=book, user=user)
+        return recommended_book_list
 
 
 # Normally a single line of Bookshelf.delete() would do the trick

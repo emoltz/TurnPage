@@ -135,14 +135,24 @@ def book_like(request):
             # DB Functions go below
             book = Book.objects.get(id=book_id)
             # book.users_liked_list.add(request.user)
-            addToShelf(book, user, "U")
+            recommended_list_from_api = addToShelf(book, user, "U")
+            export_recommended_list(recommended_list_from_api)
             # returns JSON response
-            return JsonResponse({"status": "ok"})
+            return JsonResponse({"status": "ok",
+                                 "body": recommended_list_from_api.json()})
         except Book.DoesNotExist:
             # if book doesn't exist, do nothing... we may want to log something to the console at some point.
             pass
     # if fails
     return JsonResponse({"status": "error"})
+
+
+recommended_list = []
+
+
+def export_recommended_list(recommended_list_from_db):
+    recommended_list = recommended_list_from_db
+    return recommended_list
 
 
 @login_required
@@ -175,8 +185,18 @@ class HomeView(ListView):
     model = Book
     context_object_name = "books"
     template_name = "bookSwiping/home.html"
+    recommended_book_list = []
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        # change context data based on book swipe
+
+        try:
+            self.recommended_book_list = recommended_list
+        except:
+            print("error with recommended list")
+            self.recommended_book_list = []
+
         context = super().get_context_data(**kwargs)
         all_books = self.model.objects.all()
         items = list(self.model.objects.all())
@@ -186,18 +206,40 @@ class HomeView(ListView):
         context["all_books"] = all_books
         context["book01"] = random_items[0]
         context["book02"] = random_items[1]
-        context["book03"] = random_items[2]
-        context["book04"] = random_items[3]
-        context["book05"] = random_items[4]
-        context["book06"] = random_items[5]
-        context["book07"] = random_items[6]
-        context["book08"] = random_items[7]
-        context["book09"] = random_items[8]
-        context["book10"] = random_items[9]
-        context["book11"] = random_items[10]
-        context["book12"] = random_items[11]
-        context["book13"] = random_items[12]
-        context["book14"] = random_items[13]
-        context["book15"] = random_items[14]
+
+        # fetch with API
+        # API info:
+        # url: https://8kwwql5a02.execute-api.us-east-1.amazonaws.com/dev/
+        # Params: uid, bid, direc
+
+        # third book will be the first recommended book
+        if len(self.recommended_book_list) != 0:
+            context["book03"] = self.recommended_book_list[2]
+            context["book04"] = self.recommended_book_list[3]
+            context["book05"] = self.recommended_book_list[4]
+            context["book06"] = self.recommended_book_list[5]
+            context["book07"] = self.recommended_book_list[6]
+            context["book08"] = self.recommended_book_list[7]
+            context["book09"] = self.recommended_book_list[8]
+            context["book10"] = self.recommended_book_list[9]
+            context["book11"] = self.recommended_book_list[10]
+            context["book12"] = self.recommended_book_list[11]
+            context["book13"] = self.recommended_book_list[12]
+            context["book14"] = self.recommended_book_list[13]
+            context["book15"] = self.recommended_book_list[14]
+        else:
+            context["book03"] = random_items[2]
+            context["book04"] = random_items[3]
+            context["book05"] = random_items[4]
+            context["book06"] = random_items[5]
+            context["book07"] = random_items[6]
+            context["book08"] = random_items[7]
+            context["book09"] = random_items[8]
+            context["book10"] = random_items[9]
+            context["book11"] = random_items[10]
+            context["book12"] = random_items[11]
+            context["book13"] = random_items[12]
+            context["book14"] = random_items[13]
+            context["book15"] = random_items[14]
         context["random_books"] = serializers.serialize("json", random_items)
         return context
