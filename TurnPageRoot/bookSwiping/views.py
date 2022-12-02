@@ -10,7 +10,7 @@ import random
 
 
 # Create your views here.
-class OnboardingView(TemplateView):
+class OnboardingView(LoginRequiredMixin, TemplateView):
     template_name = "bookSwiping/onboarding.html"
 
     def get_context_data(self, **kwargs):
@@ -181,7 +181,7 @@ def book_dislike(request):
     return JsonResponse({"status": "error"})
 
 
-class HomeView(ListView):
+class HomeView(LoginRequiredMixin, ListView):
     model = Book
     context_object_name = "books"
     template_name = "bookSwiping/home.html"
@@ -199,7 +199,28 @@ class HomeView(ListView):
 
         context = super().get_context_data(**kwargs)
         all_books = self.model.objects.all()
-        items = list(self.model.objects.all())
+        
+        try:
+            ud = UserDemographics.objects.get(user=self.request.user)
+            genres = list(ud.genre.all())
+            lists = []
+            for g in genres:
+                nyt = list(g.nyt_list.all())
+                for n in nyt:
+                    if n not in lists:
+                        lists.append(n)
+            if lists:
+                items = list(self.model.objects.filter(nyt_lists__in=lists))
+            else:
+                items = list(self.model.objects.all())
+        except ObjectDoesNotExist:
+            # if any of the above aren't found, give the default
+            items = list(self.model.objects.all())
+        ubs = list(Bookshelf.objects.filter(user=self.request.user))
+        for i in range(len(items)):
+            if items[i] in ubs:
+                del items[i]
+
         # change to how many random items you want
         random_items = random.sample(items, 15)
         # creates a list of books, random for now, from the database
