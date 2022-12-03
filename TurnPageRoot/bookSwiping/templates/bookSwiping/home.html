@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load django_htmx %}
+{#{% load django_htmx %}#}
 {% block content %}
     {% with users_like=all_books.users_liked_list.all %}
         {{ random_books|json_script:'random_books' }}

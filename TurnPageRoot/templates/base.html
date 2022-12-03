@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {% load static %}
+{#    {% load django_htmx %}#}
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -46,7 +47,7 @@
     <title>TurnPage</title>
 </head>
 {% load django_browser_reload %}
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
 <div id="loading">
     <div class="bookshelf_wrapper">
@@ -79,6 +80,7 @@
     JS
 {% endcomment %}
 <script src="https://unpkg.com/htmx.org@1.6.0"></script>
+{#{% django_htmx_script %}#}
 
 <script>
     document.body.addEventListener('htmx:configRequest', (event) => {

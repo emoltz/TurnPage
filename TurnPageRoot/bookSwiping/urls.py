@@ -24,7 +24,7 @@ urlpatterns = [
 ]
 
 htmx_patterns = [
-    path("/htmx", views.HomeView.htmx_test, name="htmx_test"),
+    path("htmx/", views.HomeView.htmx_test, name="htmx_test"),
 ]
 
 urlpatterns += htmx_patterns
