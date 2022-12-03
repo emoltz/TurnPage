@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.templatetags.static import static
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.core import serializers
@@ -10,7 +11,7 @@ import random
 
 
 # Create your views here.
-class OnboardingView(TemplateView):
+class OnboardingView(LoginRequiredMixin, TemplateView):
     template_name = "bookSwiping/onboarding.html"
 
     def get_context_data(self, **kwargs):
@@ -136,7 +137,7 @@ def book_like(request):
             book = Book.objects.get(id=book_id)
             # book.users_liked_list.add(request.user)
             recommended_book = addToShelf(book, user, "U")
-            export_recommended_list(recommended_book)
+            # TODO take the recommended book id and display that 2 books deep
             # returns JSON response
             return JsonResponse({"status": "ok",
                                  "body": recommended_book.json()})
@@ -145,14 +146,6 @@ def book_like(request):
             pass
     # if fails
     return JsonResponse({"status": "error"})
-
-
-recommended_list = []
-
-
-def export_recommended_list(recommended_list_from_db):
-    recommended_list = recommended_list_from_db
-    return recommended_list
 
 
 @login_required
@@ -181,31 +174,48 @@ def book_dislike(request):
     return JsonResponse({"status": "error"})
 
 
-class HomeView(ListView):
+class HomeView(LoginRequiredMixin, ListView):
     model = Book
     context_object_name = "books"
     template_name = "bookSwiping/home.html"
     recommended_book_list = []
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         # change context data based on book swipe
 
-        try:
-            self.recommended_book_list = recommended_list
-        except:
-            print("error with recommended list")
-            self.recommended_book_list = []
+        
 
         context = super().get_context_data(**kwargs)
         all_books = self.model.objects.all()
-        items = list(self.model.objects.all())
+
+        try:
+            ud = UserDemographics.objects.get(user=self.request.user)
+            genres = list(ud.genre.all())
+            lists = []
+            for g in genres:
+                nyt = list(g.nyt_list.all())
+                for n in nyt:
+                    if n not in lists:
+                        lists.append(n)
+            if lists:
+                items = list(self.model.objects.filter(nyt_lists__in=lists))
+            else:
+                items = list(self.model.objects.all())
+        except ObjectDoesNotExist:
+            # if any of the above aren't found, give the default
+            items = list(self.model.objects.all())
+        ubs = list(Bookshelf.objects.filter(user=self.request.user))
+        for i in range(len(items)):
+            if items[i] in ubs:
+                del items[i]
+
         # change to how many random items you want
-        random_items = random.sample(items, 15)
+        semi_random_book_list = random.sample(items, 15)
         # creates a list of books, random for now, from the database
         context["all_books"] = all_books
-        context["book01"] = random_items[0]
-        context["book02"] = random_items[1]
+        context["book01"] = semi_random_book_list[0]
+        context["book02"] = semi_random_book_list[1]
+        # add recommended book to book3
 
         # fetch with API
         # API info:
@@ -228,18 +238,24 @@ class HomeView(ListView):
             context["book14"] = self.recommended_book_list[13]
             context["book15"] = self.recommended_book_list[14]
         else:
-            context["book03"] = random_items[2]
-            context["book04"] = random_items[3]
-            context["book05"] = random_items[4]
-            context["book06"] = random_items[5]
-            context["book07"] = random_items[6]
-            context["book08"] = random_items[7]
-            context["book09"] = random_items[8]
-            context["book10"] = random_items[9]
-            context["book11"] = random_items[10]
-            context["book12"] = random_items[11]
-            context["book13"] = random_items[12]
-            context["book14"] = random_items[13]
-            context["book15"] = random_items[14]
-        context["random_books"] = serializers.serialize("json", random_items)
+            context["book03"] = semi_random_book_list[2]
+            context["book04"] = semi_random_book_list[3]
+            context["book05"] = semi_random_book_list[4]
+            context["book06"] = semi_random_book_list[5]
+            context["book07"] = semi_random_book_list[6]
+            context["book08"] = semi_random_book_list[7]
+            context["book09"] = semi_random_book_list[8]
+            context["book10"] = semi_random_book_list[9]
+            context["book11"] = semi_random_book_list[10]
+            context["book12"] = semi_random_book_list[11]
+            context["book13"] = semi_random_book_list[12]
+            context["book14"] = semi_random_book_list[13]
+            context["book15"] = semi_random_book_list[14]
+        context["random_books"] = serializers.serialize("json", semi_random_book_list)
         return context
+
+    def htmx_test(self):
+        static_url = static("js/book_covers/image.jpg")
+        return HttpResponse(
+            '<img class="img" src="' + static_url + '"alt="">'
+        )

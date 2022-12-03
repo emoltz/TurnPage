@@ -20,6 +20,7 @@ django-crontab==0.7.1
 django-debug-toolbar==3.7.0
 django-environ==0.9.0
 django-extensions==3.2.1
+django-htmx==1.13.0
 django-libsass==0.9
 django-location-field==2.1.0
 django-multiselectfield==0.1.12
