@@ -24,7 +24,8 @@ urlpatterns = [
 ]
 
 htmx_patterns = [
-    path("htmx/", views.htmx_test, name="htmx_test"),
+    # path("htmx/", views.htmx_test, name="htmx_test"),
+    path("htmx/", views.book_like_htmx, name="book_like_htmx"),
 ]
 
 urlpatterns += htmx_patterns

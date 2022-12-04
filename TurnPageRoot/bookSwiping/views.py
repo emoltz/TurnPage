@@ -9,8 +9,10 @@ from utils.db_functions import *
 import random
 from django_htmx.middleware import HtmxDetails
 
+
 class HtmxHttpRequest(HttpRequest):
     htmx: HtmxDetails
+
 
 # Create your views here.
 class OnboardingView(LoginRequiredMixin, TemplateView):
@@ -121,6 +123,25 @@ def book_shelf(request):
     return JsonResponse({"status": "error"})
 
 
+@require_POST
+def htmx_test(request: HtmxHttpRequest) -> HttpResponse:
+    books = Book.objects.all()
+    book = books[1]
+    # TODO so, I think the issue is that all the other post functions must be re-written as HTMX functions. So it should no longer return a json object, but the actual HTML that it will insert inot the next div
+    static_url = static("js/book_covers/image.jpg")
+    static_url2 = "https://storage.googleapis.com/du-prd/books/images/9780345484208.jpg"
+    return HttpResponse(
+        f'<img class="book-cover-img" src="{book.cover_img}"alt="">'
+    )
+
+
+@login_required
+@require_POST
+def book_like_htmx(request: HtmxHttpRequest) -> HttpResponse:
+    user = request.user
+    
+
+
 @login_required
 @require_POST
 def book_like(request):
@@ -187,16 +208,11 @@ class HomeView(LoginRequiredMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         # change context data based on book swipe
 
-        
-
         context = super().get_context_data(**kwargs)
         all_books = self.model.objects.all()
 
         # book_id = 36
         # self.next_recommended_book = self.model.objects.get(id=book_id)
-
-
-
 
         # Mock rec engine
         try:
@@ -264,15 +280,3 @@ class HomeView(LoginRequiredMixin, ListView):
             context["book15"] = semi_random_book_list[14]
         context["random_books"] = serializers.serialize("json", semi_random_book_list)
         return context
-
-
-@require_POST
-def htmx_test(request: HtmxHttpRequest) -> HttpResponse:
-    books = Book.objects.all()
-    book = books[1]
-    # TODO so, I think the issue is that all the other post functions must be re-written as HTMX functions. So it should no longer return a json object, but the actual HTML that it will insert inot the next div
-    static_url = static("js/book_covers/image.jpg")
-    static_url2 = "https://storage.googleapis.com/du-prd/books/images/9780345484208.jpg"
-    return HttpResponse(
-        f'<img class="book-cover-img" src="{book.cover_img}"alt="">'
-    )
