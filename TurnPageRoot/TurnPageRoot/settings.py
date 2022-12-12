@@ -45,9 +45,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "location_field.apps.DefaultConfig",
+    'django_htmx',
     "captcha",
     "sass_processor",
-    "django_browser_reload",
+    # "django_browser_reload",
     "bookSwiping",
     "profiles",
     "utils",
@@ -69,6 +70,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "TurnPageRoot.urls"

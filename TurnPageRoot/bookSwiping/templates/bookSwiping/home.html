@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load django_htmx %}
 {% block content %}
     {% with users_like=all_books.users_liked_list.all %}
     {{ random_books|json_script:'random_books' }}
@@ -123,7 +123,7 @@
 
                 </div>
                 <div class="col-1 p-0">
-                    <a href="#" type="button" data-id="{{ book01.id }}"
+                    <a href="/" type="button" data-id="{{ book01.id }}"
                        data-action="{% if request.user in users_like %} un{% endif %}like"
                        class="material-symbols-outlined btn arrows text-center w-100 p-0"
                        id="swipe-right-btn">heart_plus

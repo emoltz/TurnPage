@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {% load static %}
+    {% load django_htmx %}
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -43,9 +44,11 @@
     <link href="{% sass_src 'css/demo.scss' %}" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="{% static 'js/htmx.min.js' %}" defer></script>
+    {% django_htmx_script %}
     <title>TurnPage</title>
 </head>
-{% load django_browser_reload %}
+{#{% load django_browser_reload %}#}
 <body>
 
 <div id="loading">
@@ -97,6 +100,6 @@
 <script src="{% static 'js/coverflow_misc/jquery.touchSwipe.min.js' %}"></script>
 <script src="{% static "js/script.js" %}"></script>
 <script src="{% static 'js/bookshelf.js' %}"></script>
-{% django_browser_reload_script %}
+{#{% django_browser_reload_script %}#}
 </body>
 </html>

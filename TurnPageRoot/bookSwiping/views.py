@@ -1,12 +1,28 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.core import serializers
+from django_htmx.middleware import HtmxDetails
+
 from .models import *
 from utils.db_functions import *
 import random
+
+
+class HtmxHttpRequest(HttpRequest):
+    htmx: HtmxDetails
+
+
+@require_POST
+def htmx_test(request: HtmxHttpRequest) -> HttpResponse:
+    books = Book.objects.all()
+    book = books[1]
+    # TODO so, I think the issue is that all the other post functions must be re-written as HTMX functions. So it should no longer return a json object, but the actual HTML that it will insert inot the next div
+    return HttpResponse(
+        f'<img class="book-cover-img" src="{book.cover_img}"alt="">'
+    )
 
 
 # Create your views here.

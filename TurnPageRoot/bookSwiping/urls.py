@@ -22,3 +22,9 @@ urlpatterns = [
     ),
     path("bookshelf/delete_book", views.delete_book, name="delete_book"),
 ]
+
+htmx_patterns = [
+    path("htmx/", views.htmx_test, name="book_like_htmx")
+]
+
+urlpatterns += htmx_patterns
