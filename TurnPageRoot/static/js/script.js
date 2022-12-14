@@ -1,9 +1,9 @@
-document.onreadystatechange = function () {
-    const state = document.readyState
-    if (state === 'complete') {
-        $('#loading').fadeOut();
-    }
-}
+// document.onreadystatechange = function () {
+//     const state = document.readyState
+//     if (state === 'complete') {
+//         $('#loading').fadeOut();
+//     }
+// }
 let csrftoken = null;
 try {
     csrftoken = Cookies.get('csrftoken');
@@ -286,97 +286,97 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
 // MODAL
-    const books = JSON.parse(JSON.parse(document.getElementById('random_books').textContent))
-    
-    const modal = document.getElementsByClassName('modal-background')[0]
-    let plusBtn = document.getElementsByClassName('plus-btn')[0]
-    let fakeBook = document.getElementsByClassName('fake-book')[0];
-    let allBooksLoaded = false;
-
-    const setPlusBtnPosition = () => {
-        const bookImageElements = document.getElementsByClassName('book-cover-img');
-        let topBookImageElement = bookImageElements[bookImageElements.length-counter]
-        let topBookImageElementWidth = topBookImageElement.clientWidth;
-        fakeBook.style.width = topBookImageElementWidth + 'px'
-    }
-
-    while (!allBooksLoaded) {
-        const bookImageElements = document.getElementsByClassName('book-cover-img');
-        if (bookImageElements.length === 15) {
-            allBooksLoaded = true;
-            setPlusBtnPosition()
-        }
-    }
-    
-    $(window).resize(() => setPlusBtnPosition())
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            plusBtnShrink();
-        }
-    }
-
-    function plusBtnShrink() {
-        $('.modal-background').fadeOut();
-        document.getElementsByTagName('body')[0].classList.toggle('no-scroll-body')
-        plusBtn.classList.toggle('modal-box')
-        plusBtn.innerHTML = '';
-        setPlusBtnPosition();
-        setTimeout(() => {
-            plusBtn.innerHTML = "<div class='plus-btn-inner' style='display: none;'>+</div>";
-            $('.plus-btn-inner').fadeIn(100);
-            plusBtn.getElementsByClassName('plus-btn-inner')[0].addEventListener('click', plusBtnGrow)
-        },500)
-    }
-    
-    function plusBtnGrow() {
-        $('.modal-background').fadeIn();
-        $('.plus-btn-inner').fadeOut(100);
-        document.getElementsByTagName('body')[0].classList.toggle('no-scroll-body')
-        setTimeout(() => {
-            plusBtn.classList.toggle('modal-box')
-            setTimeout(() => {
-                plusBtn.innerHTML = `
-                <div class='modal-book-info'>
-                    <span class='modal-close-btn'>&times;</span>
-                    <div class='modal-book-title'>
-                        ${books[counter-1].fields.title}
-                    </div>
-                    <div class='modal-book-author'>
-                        ${books[counter-1].fields.author}
-                    </div>
-                    <hr class='modal-book-line-break'>
-                    <div class='modal-book-summary'>
-                        <div>
-                            ${books[counter-1].fields.description}
-                        </div>
-                        <button class='${reported ? "modal-report-button-reported' disabled" : "modal-report-button'"} >
-                            <span class="material-symbols-outlined">
-                                flag
-                            </span>
-                            <span class='tooltip-text'>
-                                ${reported ? 'Description reported' : 'Report book description as missing/wrong'}
-                            </span>
-                        </button>
-                    </div>                    
-                </div>
-                `
-                let closeBtn = document.getElementsByClassName('modal-close-btn')[0]
-                closeBtn.addEventListener('click', () => {
-                    plusBtnShrink();
-                })
-                const reportButton = document.getElementsByClassName('modal-report-button')[0]
-                const tooltipText = reportButton.getElementsByClassName('tooltip-text')[0]
-                reportButton.addEventListener('click', () => {
-                    reportButton.classList.toggle('modal-report-button')
-                    reportButton.classList.toggle('modal-report-button-reported')
-                    reportButton.disabled = true
-                    tooltipText.innerHTML = "Description reported"
-                    reported = true;
-                })
-            },500)
-        },100)
-    }
-    plusBtn.getElementsByClassName('plus-btn-inner')[0].addEventListener('click', plusBtnGrow)
+//     const books = JSON.parse(JSON.parse(document.getElementById('random_books').textContent))
+//
+//     const modal = document.getElementsByClassName('modal-background')[0]
+//     let plusBtn = document.getElementsByClassName('plus-btn')[0]
+//     let fakeBook = document.getElementsByClassName('fake-book')[0];
+//     let allBooksLoaded = false;
+//
+//     const setPlusBtnPosition = () => {
+//         const bookImageElements = document.getElementsByClassName('book-cover-img');
+//         let topBookImageElement = bookImageElements[bookImageElements.length-counter]
+//         let topBookImageElementWidth = topBookImageElement.clientWidth;
+//         fakeBook.style.width = topBookImageElementWidth + 'px'
+//     }
+//
+//     while (!allBooksLoaded) {
+//         const bookImageElements = document.getElementsByClassName('book-cover-img');
+//         if (bookImageElements.length === 15) {
+//             allBooksLoaded = true;
+//             setPlusBtnPosition()
+//         }
+//     }
+//
+//     $(window).resize(() => setPlusBtnPosition())
+//
+//     window.onclick = function(event) {
+//         if (event.target == modal) {
+//             plusBtnShrink();
+//         }
+//     }
+//
+//     function plusBtnShrink() {
+//         $('.modal-background').fadeOut();
+//         document.getElementsByTagName('body')[0].classList.toggle('no-scroll-body')
+//         plusBtn.classList.toggle('modal-box')
+//         plusBtn.innerHTML = '';
+//         setPlusBtnPosition();
+//         setTimeout(() => {
+//             plusBtn.innerHTML = "<div class='plus-btn-inner' style='display: none;'>+</div>";
+//             $('.plus-btn-inner').fadeIn(100);
+//             plusBtn.getElementsByClassName('plus-btn-inner')[0].addEventListener('click', plusBtnGrow)
+//         },500)
+//     }
+//
+//     function plusBtnGrow() {
+//         $('.modal-background').fadeIn();
+//         $('.plus-btn-inner').fadeOut(100);
+//         document.getElementsByTagName('body')[0].classList.toggle('no-scroll-body')
+//         setTimeout(() => {
+//             plusBtn.classList.toggle('modal-box')
+//             setTimeout(() => {
+//                 plusBtn.innerHTML = `
+//                 <div class='modal-book-info'>
+//                     <span class='modal-close-btn'>&times;</span>
+//                     <div class='modal-book-title'>
+//                         ${books[counter-1].fields.title}
+//                     </div>
+//                     <div class='modal-book-author'>
+//                         ${books[counter-1].fields.author}
+//                     </div>
+//                     <hr class='modal-book-line-break'>
+//                     <div class='modal-book-summary'>
+//                         <div>
+//                             ${books[counter-1].fields.description}
+//                         </div>
+//                         <button class='${reported ? "modal-report-button-reported' disabled" : "modal-report-button'"} >
+//                             <span class="material-symbols-outlined">
+//                                 flag
+//                             </span>
+//                             <span class='tooltip-text'>
+//                                 ${reported ? 'Description reported' : 'Report book description as missing/wrong'}
+//                             </span>
+//                         </button>
+//                     </div>
+//                 </div>
+//                 `
+//                 let closeBtn = document.getElementsByClassName('modal-close-btn')[0]
+//                 closeBtn.addEventListener('click', () => {
+//                     plusBtnShrink();
+//                 })
+//                 const reportButton = document.getElementsByClassName('modal-report-button')[0]
+//                 const tooltipText = reportButton.getElementsByClassName('tooltip-text')[0]
+//                 reportButton.addEventListener('click', () => {
+//                     reportButton.classList.toggle('modal-report-button')
+//                     reportButton.classList.toggle('modal-report-button-reported')
+//                     reportButton.disabled = true
+//                     tooltipText.innerHTML = "Description reported"
+//                     reported = true;
+//                 })
+//             },500)
+//         },100)
+//     }
+//     plusBtn.getElementsByClassName('plus-btn-inner')[0].addEventListener('click', plusBtnGrow)
 });
 

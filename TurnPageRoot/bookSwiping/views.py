@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
@@ -188,6 +189,8 @@ def book_dislike(request):
 
 
 class HomeView(LoginRequiredMixin, ListView):
+    # model should be all books that are not in the user's bookshelf
+    paginate_by = 2
     model = Book
     context_object_name = "books"
     template_name = "bookSwiping/home.html"
@@ -221,33 +224,50 @@ class HomeView(LoginRequiredMixin, ListView):
         ubs = list(Bookshelf.objects.filter(user=self.request.user))
 
         # change to how many random items you wants
-        random_items = random.sample(items, 12)
-        self.dupe_replace(random_items, ubs, items)
+        book_stack = random.sample(items, 12)
+        self.dupe_replace(book_stack, ubs, items)
 
         # Mix in 3 totally random books and shuffle
         ran_all = random.sample(list(all_books), 3)
         self.dupe_replace(ran_all, ubs, all_books)
 
         for r in ran_all:
-            random_items.append(r)
-        random.shuffle(random_items)
+            book_stack.append(r)
+        random.shuffle(book_stack)
+
+        # PAGNINATOR SETUP
+
+        p = Paginator(book_stack, 2)
+        # while the objects have pages, get the next page
+        context["page_1"] = p.page(1)
+        i = 1
+        while p.page(i).has_next():
+            i += 1
+            context["page_" + str(i)] = p.page(i)
+
+        # get the last page
+
+        context["paginator_obj"] = p.page(1)
+
 
         # creates a list of books, random for now, from the database
         context["all_books"] = all_books
-        context["book01"] = random_items[0]
-        context["book02"] = random_items[1]
-        context["book03"] = random_items[2]
-        context["book04"] = random_items[3]
-        context["book05"] = random_items[4]
-        context["book06"] = random_items[5]
-        context["book07"] = random_items[6]
-        context["book08"] = random_items[7]
-        context["book09"] = random_items[8]
-        context["book10"] = random_items[9]
-        context["book11"] = random_items[10]
-        context["book12"] = random_items[11]
-        context["book13"] = random_items[12]
-        context["book14"] = random_items[13]
-        context["book15"] = random_items[14]
-        context["random_books"] = serializers.serialize("json", random_items)
+        context["book_stack"] = book_stack
+
+        context["book01"] = book_stack[0]
+        context["book02"] = book_stack[1]
+        context["book03"] = book_stack[2]
+        context["book04"] = book_stack[3]
+        context["book05"] = book_stack[4]
+        context["book06"] = book_stack[5]
+        context["book07"] = book_stack[6]
+        context["book08"] = book_stack[7]
+        context["book09"] = book_stack[8]
+        context["book10"] = book_stack[9]
+        context["book11"] = book_stack[10]
+        context["book12"] = book_stack[11]
+        context["book13"] = book_stack[12]
+        context["book14"] = book_stack[13]
+        context["book15"] = book_stack[14]
+        context["book_stack_json"] = serializers.serialize("json", book_stack)
         return context

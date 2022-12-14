@@ -44,26 +44,26 @@
     <link href="{% sass_src 'css/demo.scss' %}" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <script src="{% static 'js/htmx.min.js' %}" defer></script>
+    <script src="https://unpkg.com/htmx.org@1.8.4" integrity="sha384-wg5Y/JwF7VxGk4zLsJEcAojRtlVp1FKKdGy1qN+OMtdq72WRvX/EdRdqg/LOhYeV" crossorigin="anonymous"></script>
     {% django_htmx_script %}
     <title>TurnPage</title>
 </head>
 {#{% load django_browser_reload %}#}
 <body>
 
-<div id="loading">
-    <div class="bookshelf_wrapper">
-        <ul class="books_list">
-            <li class="book_item first"></li>
-            <li class="book_item second"></li>
-            <li class="book_item third"></li>
-            <li class="book_item fourth"></li>
-            <li class="book_item fifth"></li>
-            <li class="book_item sixth"></li>
-        </ul>
-        <div class="shelf"></div>
-    </div>
-</div>
+{#<div id="loading">#}
+{#    <div class="bookshelf_wrapper">#}
+{#        <ul class="books_list">#}
+{#            <li class="book_item first"></li>#}
+{#            <li class="book_item second"></li>#}
+{#            <li class="book_item third"></li>#}
+{#            <li class="book_item fourth"></li>#}
+{#            <li class="book_item fifth"></li>#}
+{#            <li class="book_item sixth"></li>#}
+{#        </ul>#}
+{#        <div class="shelf"></div>#}
+{#    </div>#}
+{#</div>#}
 
 <div>
     {% include 'navbar.html' %}
